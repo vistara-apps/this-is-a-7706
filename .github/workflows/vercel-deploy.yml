@@ -31,16 +31,3 @@ jobs:
     # Skipping Vercel deployment steps as secrets are not configured
     - name: Skip Vercel Deployment
       run: echo "Skipping Vercel deployment as secrets are not configured"
-      
-    - name: Comment PR with build success
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `✅ **Build Successful!**
-            \n\nThe application has been built successfully. Vercel deployment is skipped as secrets are not configured.`
-          });

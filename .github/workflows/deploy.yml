@@ -27,6 +27,7 @@ jobs:
       env:
         NODE_OPTIONS: --max-old-space-size=4096
         
+    # Check if Vercel secrets are available
     - name: Check for Vercel secrets
       id: check-secrets
       run: |
@@ -37,6 +38,7 @@ jobs:
           echo "Skipping Vercel deployment as required secrets are not configured."
         fi
         
+    # Only run Vercel deployment if secrets are available
     - name: Deploy to Vercel (Production)
       if: steps.check-secrets.outputs.has_vercel_secrets == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
       uses: amondnet/vercel-action@v25
@@ -46,6 +48,7 @@ jobs:
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         
+    # Only run Vercel preview deployment if secrets are available
     - name: Deploy to Vercel (Preview)
       if: steps.check-secrets.outputs.has_vercel_secrets == 'true' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
       uses: amondnet/vercel-action@v25
@@ -56,6 +59,7 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         github-comment: true
         
+    # Only add PR comment if secrets are available
     - name: Comment PR with deployment URL
       if: steps.check-secrets.outputs.has_vercel_secrets == 'true' && github.event_name == 'pull_request'
       uses: actions/github-script@v7

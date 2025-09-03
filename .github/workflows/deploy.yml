@@ -17,7 +17,8 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '22'
-        cache: 'npm'
+        # Disable cache since there's no lock file
+        # cache: 'npm'
         
     - name: Install dependencies
       run: npm install
@@ -81,4 +82,3 @@ jobs:
               \n\nThis preview will be automatically updated when you push new commits to this PR.`
             });
           }
-

@@ -34,6 +34,7 @@ jobs:
           echo "has_vercel_secrets=true" >> $GITHUB_OUTPUT
         else
           echo "has_vercel_secrets=false" >> $GITHUB_OUTPUT
+          echo "Skipping Vercel deployment as required secrets are not configured."
         fi
         
     - name: Deploy to Vercel (Production)
@@ -53,6 +54,7 @@ jobs:
         vercel-args: '--no-wait'
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        github-comment: true
         
     - name: Comment PR with deployment URL
       if: steps.check-secrets.outputs.has_vercel_secrets == 'true' && github.event_name == 'pull_request'
@@ -75,8 +77,4 @@ jobs:
               \n\nThis preview will be automatically updated when you push new commits to this PR.`
             });
           }
-          
-    - name: Skip Vercel deployment message
-      if: steps.check-secrets.outputs.has_vercel_secrets == 'false'
-      run: echo "Skipping Vercel deployment as required secrets are not configured."
 
